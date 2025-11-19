@@ -147,6 +147,9 @@ app.post('/v1/sign-out', (req: Request, res: Response) => {
   const accessToken = authHeader.split('')[1]
   redisClient.set(accessToken, 'blacklist', { EX: accessTokenExpiresAt })
   redisClient.set(refreshToken, 'blacklist', { EX: refreshTokenExpiresAt })
+  res.clearCookie(refreshKey, {
+        maxAge: 0,
+      });
   /**
    * /refresh /protected /sign-out
    * jwt.verify(token,TOKEN_SECRET) // for access and refresh token
